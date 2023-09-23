@@ -1,11 +1,9 @@
 from lapicero import Lapicero
 from cliente import Cliente
 
-# Crear una lista para almacenar clientes y lapiceros
 clientes = []
 lapiceros = []
 
-# Crear algunos lapiceros
 lapicero1 = Lapicero(1, "BIC", "Azul")
 lapicero2 = Lapicero(2, "Pilot", "Negro")
 lapicero3 = Lapicero(3, "Faber-Castell", "Rojo")
@@ -16,10 +14,8 @@ lapicero7 = Lapicero(7, "Faber-Castell", "Negro")
 lapicero8 = Lapicero(8, "Paper Mate", "Azul")
 lapicero9 = Lapicero(9, "Paper Mate", "Rojo")
 
-# Agregar los lapiceros a la lista de lapiceros
 lapiceros.extend([lapicero1, lapicero2, lapicero3, lapicero4, lapicero5, lapicero6, lapicero7, lapicero8, lapicero9])
 
-# Función para mostrar el menú y procesar las opciones del usuario
 def mostrar_menu():
     print("Menú:")
     print("1. Crear cliente")
@@ -27,7 +23,6 @@ def mostrar_menu():
     print("3. Devolver lapicero")
     print("4. Salir")
 
-# Función para mostrar lapiceros disponibles
 def mostrar_lapiceros_disponibles():
     print("Lapiceros disponibles:")
     for lapicero in lapiceros:
@@ -54,13 +49,11 @@ def main():
                 print("No hay clientes registrados. Debe crear un cliente primero.")
                 continue
 
-            # Mostrar lapiceros disponibles
             mostrar_lapiceros_disponibles()
 
             cliente_id = int(input("Ingrese el ID del cliente que desea alquilar: "))
             lapicero_id = int(input("Ingrese el ID del lapicero que desea alquilar: "))
 
-            # Buscar el cliente y el lapicero en la lista
             cliente = None
             for c in clientes:
                 if c.id_cliente == cliente_id:
@@ -74,7 +67,7 @@ def main():
                     break
 
             if cliente and lapicero:
-                if cliente.alquilar_lapicero(lapicero):  # Usando el método alquilar_lapicero
+                if cliente.alquilar_lapicero(lapicero): 
                     print(f"Lapicero {lapicero.marca} alquilado por {cliente.nombre} {cliente.apellido}")
                 else:
                     print("El lapicero seleccionado no está disponible.")
@@ -86,7 +79,6 @@ def main():
             cliente_id = int(input("Ingrese el ID del cliente: "))
             lapicero_id = int(input("Ingrese el ID del lapicero que desea devolver: "))
 
-            # Buscar el cliente y el lapicero en la lista
             cliente = None
             for c in clientes:
                 if c.id_cliente == cliente_id:
@@ -100,7 +92,7 @@ def main():
                     break
 
             if cliente and lapicero:
-                if cliente.devolver_lapicero(lapicero):  # Usando el método devolver_lapicero
+                if cliente.devolver_lapicero(lapicero):
                     print(f"Lapicero {lapicero.marca} devuelto por {cliente.nombre} {cliente.apellido}")
                 else:
                     print("El lapicero seleccionado no fue alquilado por este cliente o no está en su lista de alquileres.")

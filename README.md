@@ -16,7 +16,7 @@ Este es mi repositorio personal para la entrega de tareas y talleres del curso d
 
 1. Dirígete a la carpeta de la tarea o taller que deseas ver.
 
-2. Dentro de esa carpeta, encontrarás los archivos relacionados con la tarea, incluidas mis evaluaciones en caso de que sea un taller o tarea que ya haya completado.
+2. Dentro de esa carpeta, encontrarás los archivos relacionados con la tarea, incluidas mis evaluaciones en caso de que sea un taller o tarea que esté completando o ya haya completado.
 
 ## Contacto
 
