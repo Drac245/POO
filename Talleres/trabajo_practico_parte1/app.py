@@ -1,13 +1,23 @@
 from lapicero import Lapicero
 from cliente import Cliente
 
-# Crear una lista para almacenar clientes
+# Crear una lista para almacenar clientes y lapiceros
 clientes = []
+lapiceros = []
 
 # Crear algunos lapiceros
 lapicero1 = Lapicero(1, "BIC", "Azul")
 lapicero2 = Lapicero(2, "Pilot", "Negro")
 lapicero3 = Lapicero(3, "Faber-Castell", "Rojo")
+lapicero4 = Lapicero(4, "BIC", "Negro")
+lapicero5 = Lapicero(5, "BIC", "Rojo")
+lapicero6 = Lapicero(6, "Faber-Castell", "Azul")
+lapicero7 = Lapicero(7, "Faber-Castell", "Negro")
+lapicero8 = Lapicero(8, "Paper Mate", "Azul")
+lapicero9 = Lapicero(9, "Paper Mate", "Rojo")
+
+# Agregar los lapiceros a la lista de lapiceros
+lapiceros.extend([lapicero1, lapicero2, lapicero3, lapicero4, lapicero5, lapicero6, lapicero7, lapicero8, lapicero9])
 
 # Función para mostrar el menú y procesar las opciones del usuario
 def mostrar_menu():
@@ -17,6 +27,14 @@ def mostrar_menu():
     print("3. Devolver lapicero")
     print("4. Salir")
 
+# Función para mostrar lapiceros disponibles
+def mostrar_lapiceros_disponibles():
+    print("Lapiceros disponibles:")
+    for lapicero in lapiceros:
+        if lapicero.disponible:
+            print(f"ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
+
+# Función principal del programa
 def main():
     while True:
         mostrar_menu()
@@ -37,10 +55,7 @@ def main():
                 continue
 
             # Mostrar lapiceros disponibles
-            print("Lapiceros disponibles:")
-            for lapicero in [lapicero1, lapicero2, lapicero3]:
-                if lapicero.disponible:
-                    print(f"ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
+            mostrar_lapiceros_disponibles()
 
             cliente_id = int(input("Ingrese el ID del cliente que desea alquilar: "))
             lapicero_id = int(input("Ingrese el ID del lapicero que desea alquilar: "))
@@ -53,13 +68,13 @@ def main():
                     break
 
             lapicero = None
-            for l in [lapicero1, lapicero2, lapicero3]:
+            for l in lapiceros:
                 if l.id_lapicero == lapicero_id and l.disponible:
                     lapicero = l
                     break
 
             if cliente and lapicero:
-                if cliente.alquilar_lapicero(lapicero):
+                if cliente.alquilar_lapicero(lapicero):  # Usando el método alquilar_lapicero
                     print(f"Lapicero {lapicero.marca} alquilado por {cliente.nombre} {cliente.apellido}")
                 else:
                     print("El lapicero seleccionado no está disponible.")
@@ -67,7 +82,7 @@ def main():
                 print("Cliente o lapicero no encontrado o lapicero no disponible.")
 
         elif opcion == "3":
-            # Devolver lapicero (código existente)
+            # Devolver lapicero
             cliente_id = int(input("Ingrese el ID del cliente: "))
             lapicero_id = int(input("Ingrese el ID del lapicero que desea devolver: "))
 
@@ -77,15 +92,15 @@ def main():
                 if c.id_cliente == cliente_id:
                     cliente = c
                     break
-            
+
             lapicero = None
-            for l in [lapicero1, lapicero2, lapicero3]:
+            for l in lapiceros:
                 if l.id_lapicero == lapicero_id and not l.disponible:
                     lapicero = l
                     break
-            
+
             if cliente and lapicero:
-                if cliente.devolver_lapicero(lapicero):
+                if cliente.devolver_lapicero(lapicero):  # Usando el método devolver_lapicero
                     print(f"Lapicero {lapicero.marca} devuelto por {cliente.nombre} {cliente.apellido}")
                 else:
                     print("El lapicero seleccionado no fue alquilado por este cliente o no está en su lista de alquileres.")

@@ -7,19 +7,14 @@ class Cliente:
 
     def alquilar_lapicero(self, lapicero):
         if lapicero.disponible:
-            lapicero.marcar_como_alquilado()
+            lapicero.disponible = False
             self.lapiceros_alquilados.append(lapicero)
             return True
-        else:
-            return False
+        return False
 
     def devolver_lapicero(self, lapicero):
         if lapicero in self.lapiceros_alquilados:
-            lapicero.marcar_como_disponible()
+            lapicero.disponible = True
             self.lapiceros_alquilados.remove(lapicero)
             return True
-        else:
-            return False
-
-    def __str__(self):
-        return f"Cliente ID: {self.id_cliente}, Nombre: {self.nombre}, Apellido: {self.apellido}"
+        return False
