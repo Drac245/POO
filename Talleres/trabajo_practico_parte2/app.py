@@ -61,10 +61,15 @@ class Interfaz:
         boton_guardar.pack()
 
     def guardar_cliente(self, nombre, apellido, ventana):
+        if not nombre or not apellido:
+            messagebox.showerror("Error", "El nombre y el apellido no pueden estar vacíos.")
+            return
+
         nuevo_cliente = Cliente(len(self.clientes) + 1, nombre, apellido)
         self.clientes.append(nuevo_cliente)
         ventana.destroy()
         messagebox.showinfo("Información", f"Cliente creado con éxito. ID del cliente: {nuevo_cliente.id_cliente}")
+
 
     def alquilar_lapicero(self):
         ventana_alquilar_lapicero = tk.Toplevel(self.root)
@@ -86,6 +91,10 @@ class Interfaz:
         boton_alquilar.pack()
 
     def guardar_alquiler(self, cliente_id, lapicero_id, ventana):
+
+        if not cliente_id.isdigit() or not lapicero_id.isdigit():
+            messagebox.showerror("Error", "Las IDs del cliente y del lapicero deben ser números enteros.")
+            return
         cliente = next((c for c in self.clientes if c.id_cliente == int(cliente_id)), None)
         lapicero = next((l for l in self.lapiceros if l.id_lapicero == int(lapicero_id) and l.disponible), None)
 
@@ -127,13 +136,48 @@ class Interfaz:
                 etiqueta_lapicero = tk.Label(self.ventana_lapiceros_disponibles, text=f"ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
                 etiqueta_lapicero.pack()
 
-        self.root.after(1000, self.mostrar_lapiceros_disponibles)
+        self.root.after(2000, self.mostrar_lapiceros_disponibles)
+
+    def guardar_devolucion(self, cliente_id, lapicero_id, ventana):
+        cliente = next((c for c in self.clientes if c.id_cliente == int(cliente_id)), None)
+        lapicero = next((l for l in self.lapiceros if l.id_lapicero == int(lapicero_id) and not l.disponible), None)
+
+        if cliente and lapicero:
+            if cliente.devolver_lapicero(lapicero):
+                ventana.destroy()
+                messagebox.showinfo("Información", "Lapicero devuelto con éxito")
+            else:
+                messagebox.showerror("Error", "El cliente no ha alquilado el lapicero seleccionado.")
+        else:
+            messagebox.showerror("Error", "Cliente o lapicero no encontrado o lapicero ya está disponible.")
+
+    def mostrar_clientes(self):
+        for widget in self.ventana_clientes.winfo_children():
+            widget.destroy()
+
+        for cliente in self.clientes:
+            etiqueta_cliente = tk.Label(self.ventana_clientes, text=f"ID: {cliente.id_cliente}, Nombre: {cliente.nombre}, Apellido: {cliente.apellido}")
+            etiqueta_cliente.pack()
+            for lapicero in cliente.lapiceros_alquilados:
+                etiqueta_lapicero = tk.Label(self.ventana_clientes, text=f"    Lapicero alquilado - ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
+                etiqueta_lapicero.pack()
+
+        self.root.after(2000, self.mostrar_clientes)
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("300x200")
+    root.geometry("300x200+0+0") 
+
     interfaz = Interfaz(root, clientes, lapiceros)
+
     interfaz.ventana_lapiceros_disponibles = tk.Toplevel(root)
+    interfaz.ventana_lapiceros_disponibles.geometry("300x200+500+0") 
     interfaz.ventana_lapiceros_disponibles.title("Lapiceros Disponibles")
-    interfaz.mostrar_lapiceros_disponibles()
+    interfaz.mostrar_lapiceros_disponibles() 
+
+    interfaz.ventana_clientes = tk.Toplevel(root)
+    interfaz.ventana_clientes.geometry("300x400+1000+0")
+    interfaz.ventana_clientes.title("Clientes y Lapiceros Alquilados")
+    interfaz.mostrar_clientes() 
+
     root.mainloop()
