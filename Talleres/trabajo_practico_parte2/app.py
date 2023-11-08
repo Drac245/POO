@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 from lapicero import Lapicero
 from cliente import Cliente
 
@@ -18,19 +19,6 @@ lapicero9 = Lapicero(9, "Paper Mate", "Rojo")
 
 lapiceros.extend([lapicero1, lapicero2, lapicero3, lapicero4, lapicero5, lapicero6, lapicero7, lapicero8, lapicero9])
 
-def mostrar_menu():
-    print("Menú:")
-    print("1. Crear cliente")
-    print("2. Alquilar lapicero")
-    print("3. Devolver lapicero")
-    print("4. Salir")
-
-def mostrar_lapiceros_disponibles():
-    print("Lapiceros disponibles:")
-    for lapicero in lapiceros:
-        if lapicero.disponible:
-            print(f"ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
-
 class Interfaz:
     def __init__(self, root, clientes, lapiceros):
         self.root = root
@@ -38,14 +26,20 @@ class Interfaz:
         self.lapiceros = lapiceros
         self.root.title("Alquiler de Lapiceros")
 
+        style = ttk.Style()
+        style.configure("BW.TButton", foreground="black", background="white", font=("Arial", 20), padding=10)
+
         self.boton_crear_cliente = tk.Button(self.root, text="Crear cliente", command=self.crear_cliente)
         self.boton_crear_cliente.pack()
+        self.boton_crear_cliente.pack(pady=10)
 
         self.boton_alquilar_lapicero = tk.Button(self.root, text="Alquilar lapicero", command=self.alquilar_lapicero)
         self.boton_alquilar_lapicero.pack()
+        self.boton_alquilar_lapicero.pack(pady=10)
 
         self.boton_devolver_lapicero = tk.Button(self.root, text="Devolver lapicero", command=self.devolver_lapicero)
         self.boton_devolver_lapicero.pack()
+        self.boton_devolver_lapicero.pack(pady=10)
 
     def crear_cliente(self):
         ventana_crear_cliente = tk.Toplevel(self.root)
@@ -70,7 +64,7 @@ class Interfaz:
         nuevo_cliente = Cliente(len(self.clientes) + 1, nombre, apellido)
         self.clientes.append(nuevo_cliente)
         ventana.destroy()
-        messagebox.showinfo("Información", "Cliente creado con éxito")
+        messagebox.showinfo("Información", f"Cliente creado con éxito. ID del cliente: {nuevo_cliente.id_cliente}")
 
     def alquilar_lapicero(self):
         ventana_alquilar_lapicero = tk.Toplevel(self.root)
@@ -123,7 +117,23 @@ class Interfaz:
         boton_devolver = tk.Button(ventana_devolver_lapicero, text="Devolver", command=lambda: self.guardar_devolucion(entrada_cliente_id.get(), entrada_lapicero_id.get(), ventana_devolver_lapicero))
         boton_devolver.pack()
 
+    def mostrar_lapiceros_disponibles(self):
+
+        for widget in self.ventana_lapiceros_disponibles.winfo_children():
+            widget.destroy()
+
+        for lapicero in self.lapiceros:
+            if lapicero.disponible:
+                etiqueta_lapicero = tk.Label(self.ventana_lapiceros_disponibles, text=f"ID: {lapicero.id_lapicero}, Marca: {lapicero.marca}, Color: {lapicero.color}")
+                etiqueta_lapicero.pack()
+
+        self.root.after(1000, self.mostrar_lapiceros_disponibles)
+
 if __name__ == "__main__":
     root = tk.Tk()
+    root.geometry("300x200")
     interfaz = Interfaz(root, clientes, lapiceros)
+    interfaz.ventana_lapiceros_disponibles = tk.Toplevel(root)
+    interfaz.ventana_lapiceros_disponibles.title("Lapiceros Disponibles")
+    interfaz.mostrar_lapiceros_disponibles()
     root.mainloop()
